@@ -289,10 +289,10 @@ async def get_capabilities(
     - total_count: 功能总数
     """
     # 获取用户的API类型
-    if 'api_key' in auth_info:
-        user_api_type = auth_info['api_key']['api_type']
+    if 'api_key' in auth_info and isinstance(auth_info['api_key'], dict):
+        user_api_type = auth_info['api_key'].get('api_type', 'web')
     else:
-        user_api_type = auth_info['api_type']
+        user_api_type = auth_info.get('api_type', 'web')
     
     # 过滤功能
     filtered_capabilities = {}
@@ -407,10 +407,10 @@ async def get_endpoints(
     - total_count: 端点总数
     """
     # 获取用户的API类型
-    if 'api_key' in auth_info:
-        user_api_type = auth_info['api_key']['api_type']
+    if 'api_key' in auth_info and isinstance(auth_info['api_key'], dict):
+        user_api_type = auth_info['api_key'].get('api_type', 'web')
     else:
-        user_api_type = auth_info['api_type']
+        user_api_type = auth_info.get('api_type', 'web')
     
     # 收集所有端点
     all_endpoints = []

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>N8 Hub Control Center</title>
+    <title>N8 枢纽控制中心</title>
     <style>
         :root {
             --primary-color: #2563eb;
@@ -207,16 +207,16 @@
     <!-- Login Screen -->
     <div id="login-screen">
         <div class="login-box">
-            <h2 style="text-align: center; margin-bottom: 1.5rem;">N8 Hub Login</h2>
+            <h2 style="text-align: center; margin-bottom: 1.5rem;">N8 枢纽登录</h2>
             <div class="form-group">
                 <label>API Key</label>
-                <input type="text" id="login-key" placeholder="Enter API Key">
+                <input type="text" id="login-key" placeholder="请输入 API Key">
             </div>
             <div class="form-group">
                 <label>API Secret</label>
-                <input type="password" id="login-secret" placeholder="Enter API Secret">
+                <input type="password" id="login-secret" placeholder="请输入 API Secret">
             </div>
-            <button onclick="handleLogin()" style="width: 100%">Login</button>
+            <button onclick="handleLogin()" style="width: 100%">登录</button>
         </div>
     </div>
 
@@ -224,33 +224,33 @@
     <div id="dashboard">
         <header>
             <div class="container header-content">
-                <h1>N8 Hub Control Center</h1>
-                <button onclick="handleLogout()" class="secondary">Logout</button>
+                <h1>N8 枢纽控制中心</h1>
+                <button onclick="handleLogout()" class="secondary">退出登录</button>
             </div>
         </header>
         
         <div class="container">
             <div class="nav-tabs">
-                <div class="nav-tab active" onclick="switchTab('devices')">Devices</div>
-                <div class="nav-tab" onclick="switchTab('apikeys')">API Keys</div>
+                <div class="nav-tab active" onclick="switchTab('devices')">设备管理</div>
+                <div class="nav-tab" onclick="switchTab('apikeys')">API Key 管理</div>
             </div>
             
             <!-- Devices Tab -->
             <div id="tab-devices">
                 <div class="card">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                        <h2>Registered Devices</h2>
-                        <button onclick="loadDevices()">Refresh</button>
+                        <h2>已注册设备</h2>
+                        <button onclick="loadDevices()">刷新列表</button>
                     </div>
                     <table id="devices-table">
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Name</th>
-                                <th>IP Address</th>
-                                <th>Status</th>
-                                <th>Last Heartbeat</th>
-                                <th>Actions</th>
+                                <th>名称</th>
+                                <th>IP 地址</th>
+                                <th>状态</th>
+                                <th>最后心跳</th>
+                                <th>操作</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -262,18 +262,18 @@
             <div id="tab-apikeys" style="display: none;">
                 <div class="card">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                        <h2>API Keys Management</h2>
-                        <button onclick="showCreateKeyModal()">Create New Key</button>
+                        <h2>API Key 管理</h2>
+                        <button onclick="showCreateKeyModal()">创建新 Key</button>
                     </div>
                     <table id="keys-table">
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Name</th>
-                                <th>Type</th>
-                                <th>Permissions</th>
-                                <th>Created At</th>
-                                <th>Actions</th>
+                                <th>名称</th>
+                                <th>类型</th>
+                                <th>权限</th>
+                                <th>创建时间</th>
+                                <th>操作</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -286,26 +286,26 @@
     <!-- Create Key Modal -->
     <div id="create-key-modal" class="modal">
         <div class="modal-content">
-            <h3>Create New API Key</h3>
+            <h3>创建新 API Key</h3>
             <div class="form-group">
-                <label>Name</label>
+                <label>名称</label>
                 <input type="text" id="new-key-name">
             </div>
             <div class="form-group">
-                <label>Type</label>
+                <label>类型</label>
                 <select id="new-key-type">
-                    <option value="web">Web (Admin)</option>
-                    <option value="internal">Internal (Device)</option>
-                    <option value="external">External (Integration)</option>
+                    <option value="web">Web (管理员)</option>
+                    <option value="internal">Internal (设备)</option>
+                    <option value="external">External (集成)</option>
                 </select>
             </div>
             <div class="form-group">
-                <label>Secret</label>
-                <input type="text" id="new-key-secret" placeholder="Auto-generated if empty">
+                <label>Secret (可选)</label>
+                <input type="text" id="new-key-secret" placeholder="留空自动生成">
             </div>
             <div class="modal-actions">
-                <button class="secondary" onclick="closeModal('create-key-modal')">Cancel</button>
-                <button onclick="createApiKey()">Create</button>
+                <button class="secondary" onclick="closeModal('create-key-modal')">取消</button>
+                <button onclick="createApiKey()">创建</button>
             </div>
         </div>
     </div>
@@ -313,189 +313,169 @@
     <!-- Rename Device Modal -->
     <div id="rename-device-modal" class="modal">
         <div class="modal-content">
-            <h3>Rename Device</h3>
+            <h3>重命名设备</h3>
             <input type="hidden" id="rename-device-id">
             <div class="form-group">
-                <label>New Name</label>
+                <label>新名称</label>
                 <input type="text" id="new-device-name">
             </div>
             <div class="modal-actions">
-                <button class="secondary" onclick="closeModal('rename-device-modal')">Cancel</button>
-                <button onclick="submitRenameDevice()">Save</button>
+                <button class="secondary" onclick="closeModal('rename-device-modal')">取消</button>
+                <button onclick="submitRenameDevice()">保存</button>
             </div>
         </div>
     </div>
 
-    <!-- Toast -->
     <div id="toast" class="toast"></div>
 
     <script>
-        // Configuration
+        // State
+        let apiKey = localStorage.getItem('n8_api_key');
+        let apiSecret = localStorage.getItem('n8_api_secret');
         const API_BASE = '/api/v1';
-        let authHeaders = {};
 
-        // Auth Logic
-        function handleLogin() {
+        // Init
+        if (apiKey && apiSecret) {
+            showDashboard();
+        }
+
+        // Auth Functions
+        async function handleLogin() {
             const key = document.getElementById('login-key').value;
             const secret = document.getElementById('login-secret').value;
             
             if (!key || !secret) {
-                showToast('请输入密钥和密码', 'error');
+                showToast('请输入 API Key 和 Secret', 'error');
                 return;
             }
 
-            authHeaders = {
-                'X-API-Key': key,
-                'X-API-Secret': secret
-            };
-
-            // Verify credentials by fetching devices
-            fetch(`${API_BASE}/devices`, { headers: authHeaders })
-                .then(res => {
-                    if (res.ok) {
-                        document.getElementById('login-screen').style.display = 'none';
-                        document.getElementById('dashboard').style.display = 'block';
-                        loadDevices();
-                        localStorage.setItem('n8_auth', JSON.stringify({key, secret}));
-                    } else {
-                        showToast('登录失败：凭证无效', 'error');
+            try {
+                // Verify credentials by fetching capabilities
+                const response = await fetch(`${API_BASE}/discovery/capabilities`, {
+                    headers: {
+                        'X-API-Key': key,
+                        'X-API-Secret': secret
                     }
-                })
-                .catch(err => showToast('连接错误', 'error');;
+                });
+
+                if (response.ok) {
+                    apiKey = key;
+                    apiSecret = secret;
+                    localStorage.setItem('n8_api_key', key);
+                    localStorage.setItem('n8_api_secret', secret);
+                    showDashboard();
+                    showToast('登录成功', 'success');
+                } else {
+                    showToast('认证失败', 'error');
+                }
+            } catch (error) {
+                showToast('连接错误: ' + error.message, 'error');
+            }
         }
 
         function handleLogout() {
-            localStorage.removeItem('n8_auth');
-            location.reload();
+            apiKey = null;
+            apiSecret = null;
+            localStorage.removeItem('n8_api_key');
+            localStorage.removeItem('n8_api_secret');
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('login-screen').style.display = 'flex';
         }
 
-        // Auto-login
-        const savedAuth = localStorage.getItem('n8_auth');
-        if (savedAuth) {
-            const {key, secret} = JSON.parse(savedAuth);
-            document.getElementById('login-key').value = key;
-            document.getElementById('login-secret').value = secret;
-            handleLogin();
+        function showDashboard() {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            loadDevices();
         }
 
-        // Tabs
+        // Navigation
         function switchTab(tabName) {
             document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
             event.target.classList.add('active');
             
-            document.getElementById('tab-devices').style.display = tabName === 'devices' ? 'block' : 'none';
-            document.getElementById('tab-apikeys').style.display = tabName === 'apikeys' ? 'block' : 'none';
+            document.getElementById('tab-devices').style.display = 'none';
+            document.getElementById('tab-apikeys').style.display = 'none';
+            
+            document.getElementById(`tab-${tabName}`).style.display = 'block';
             
             if (tabName === 'devices') loadDevices();
             if (tabName === 'apikeys') loadApiKeys();
         }
 
-        // Devices Management
+        // Devices
         async function loadDevices() {
             try {
-                const res = await fetch(`${API_BASE}/devices`, { headers: authHeaders });
-                const devices = await res.json();
+                const response = await fetch(`${API_BASE}/devices`, {
+                    headers: { 'X-API-Key': apiKey, 'X-API-Secret': apiSecret }
+                });
+                const data = await response.json();
+                
                 const tbody = document.querySelector('#devices-table tbody');
                 tbody.innerHTML = '';
                 
-                devices.forEach(d => {
+                data.forEach(device => {
                     const tr = document.createElement('tr');
-                    const isOnline = (new Date() - new Date(d.last_heartbeat)) < 60000; // 1 min threshold
-                    
                     tr.innerHTML = `
-                        <td>${d.device_id}</td>
-                        <td>${d.device_name || '-'}</td>
-                        <td>${d.ip_address}</td>
-                        <td><span class="status-badge ${isOnline ? 'status-online' : 'status-offline'}">${isOnline ? '在线' : '离线'}</span></td>
-                        <td>${new Date(d.last_heartbeat).toLocaleString()}</td>
+                        <td>${device.device_id}</td>
+                        <td>${device.hostname || '-'}</td>
+                        <td>${device.ip_address || '-'}</td>
+                        <td><span class="status-badge ${device.status === 'online' ? 'status-online' : 'status-offline'}">${device.status === 'online' ? '在线' : '离线'}</span></td>
+                        <td>${new Date(device.last_seen).toLocaleString()}</td>
                         <td>
-                            <button onclick="openRenameModal('${d.device_id}', '${d.device_name || ''}')">重命名</button>
+                            <button class="secondary" onclick="showRenameModal('${device.device_id}', '${device.hostname}')">重命名</button>
+                            <button class="danger" onclick="deleteDevice('${device.device_id}')">删除</button>
                         </td>
                     `;
                     tbody.appendChild(tr);
                 });
-            } catch (err) {
-                console.error(err);
-                showToast('Failed to load devices', 'error');
+            } catch (error) {
+                console.error('Failed to load devices:', error);
             }
         }
 
-        function openRenameModal(id, currentName) {
-            document.getElementById('rename-device-id').value = id;
-            document.getElementById('new-device-name').value = currentName;
-            document.getElementById('rename-device-modal').style.display = 'flex';
-        }
-
-        async function submitRenameDevice() {
-            const id = document.getElementById('rename-device-id').value;
-            const name = document.getElementById('new-device-name').value;
-            
-            try {
-                const res = await fetch(`${API_BASE}/devices/${id}`, {
-                    method: 'PUT',
-                    headers: { ...authHeaders, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ device_name: name })
-                });
-                
-                if (res.ok) {
-                    showToast('设备重命名成功', 'success');
-                    closeModal('rename-device-modal');
-                    loadDevices();
-                } else {
-                    showToast('重命名设备失败', 'error');
-                }
-            } catch (err) {
-                showToast('重命名设备出错', 'error');
-            }
-        }
-
-        // API Keys Management
+        // API Keys
         async function loadApiKeys() {
             try {
-                const res = await fetch(`${API_BASE}/auth/keys`, { headers: authHeaders });
-                if (res.status === 403) {
-                    document.querySelector('#keys-table tbody').innerHTML = '<tr><td colspan="6" style="text-align:center">权限拒绝：仅 Web 管理员可管理密钥</td></tr>';
-                    return;
-                }
+                const response = await fetch(`${API_BASE}/api-keys`, {
+                    headers: { 'X-API-Key': apiKey, 'X-API-Secret': apiSecret }
+                });
+                const data = await response.json();
                 
-                const keys = await res.json();
                 const tbody = document.querySelector('#keys-table tbody');
                 tbody.innerHTML = '';
                 
-                keys.forEach(k => {
+                data.forEach(key => {
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
-                        <td>${k.id}</td>
-                        <td>${k.api_name}</td>
-                        <td>${k.api_type}</td>
-                        <td>${k.permissions.join(', ') || '*'}</td>
-                        <td>${new Date(k.created_at).toLocaleDateString()}</td>
+                        <td>${key.id}</td>
+                        <td>${key.api_name}</td>
+                        <td>${key.api_type}</td>
+                        <td>${Array.isArray(key.permissions) ? key.permissions.join(', ') : '*'}</td>
+                        <td>${new Date(key.created_at).toLocaleDateString()}</td>
                         <td>
-                            <button class="danger" onclick="deleteApiKey(${k.id})">删除</button>
+                            <button class="danger" onclick="deleteApiKey(${key.id})">删除</button>
                         </td>
                     `;
                     tbody.appendChild(tr);
                 });
-            } catch (err) {
-                showToast('加载 API 密钥失败', 'error');
+            } catch (error) {
+                console.error('Failed to load API keys:', error);
             }
-        }
-
-        function showCreateKeyModal() {
-            document.getElementById('create-key-modal').style.display = 'flex';
         }
 
         async function createApiKey() {
             const name = document.getElementById('new-key-name').value;
             const type = document.getElementById('new-key-type').value;
-            let secret = document.getElementById('new-key-secret').value;
-            
-            if (!secret) secret = Math.random().toString(36).slice(-10) + Math.random().toString(36).slice(-10);
+            const secret = document.getElementById('new-key-secret').value || Math.random().toString(36).slice(-8);
             
             try {
-                const res = await fetch(`${API_BASE}/auth/keys`, {
+                const response = await fetch(`${API_BASE}/api-keys`, {
                     method: 'POST',
-                    headers: { ...authHeaders, 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-API-Key': apiKey,
+                        'X-API-Secret': apiSecret
+                    },
                     body: JSON.stringify({
                         api_name: name,
                         api_type: type,
@@ -504,51 +484,60 @@
                     })
                 });
                 
-                if (res.ok) {
-                    const data = await res.json();
-                    alert(`API 密钥已创建！\n\n密钥: ${data.api_key}\n密码: ${secret}\n\n请立即保存此密码！稍后无法找回。`);
+                if (response.ok) {
                     closeModal('create-key-modal');
                     loadApiKeys();
+                    showToast('API Key 创建成功', 'success');
+                    alert(`请保存您的 Secret: ${secret}`);
                 } else {
-                    const err = await res.json();
-                    showToast(err.detail || '创建密钥失败', 'error');
+                    showToast('创建失败', 'error');
                 }
-            } catch (err) {
-                showToast('创建密钥出错', 'error');
+            } catch (error) {
+                showToast('Error: ' + error.message, 'error');
             }
         }
 
         async function deleteApiKey(id) {
-            if (!confirm('确定要删除此 API 密钥吗？')) return;
+            if (!confirm('确定要删除这个 API Key 吗？')) return;
             
             try {
-                const res = await fetch(`${API_BASE}/auth/keys/${id}`, {
+                const response = await fetch(`${API_BASE}/api-keys/${id}`, {
                     method: 'DELETE',
-                    headers: authHeaders
+                    headers: { 'X-API-Key': apiKey, 'X-API-Secret': apiSecret }
                 });
                 
-                if (res.ok) {
-                    showToast('API 密钥已删除', 'success');
+                if (response.ok) {
                     loadApiKeys();
-                } else {
-                    showToast('删除密钥失败', 'error');
+                    showToast('删除成功', 'success');
                 }
-            } catch (err) {
-                showToast('删除密钥出错', 'error');
+            } catch (error) {
+                showToast('Error: ' + error.message, 'error');
             }
         }
 
-        // Utilities
-        function closeModal(id) {
-            document.getElementById(id).style.display = 'none';
+        // UI Helpers
+        function showCreateKeyModal() {
+            document.getElementById('create-key-modal').style.display = 'flex';
         }
 
-        function showToast(msg, type) {
+        function showRenameModal(deviceId, currentName) {
+            document.getElementById('rename-device-id').value = deviceId;
+            document.getElementById('new-device-name').value = currentName;
+            document.getElementById('rename-device-modal').style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
-            toast.textContent = msg;
+            toast.textContent = message;
             toast.className = `toast ${type}`;
             toast.style.display = 'block';
-            setTimeout(() => toast.style.display = 'none', 3000);
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
         }
     </script>
 </body>

@@ -1,1 +1,4 @@
-FROM nginx:alpine\nCOPY index.html /usr/share/nginx/html/index.html\nCOPY index.html /usr/share/nginx/html/admin.html\nEXPOSE 80
+FROM nginx:alpine
+COPY index.html /usr/share/nginx/html/index.html
+COPY index.html /usr/share/nginx/html/admin.html
+EXPOSE 80

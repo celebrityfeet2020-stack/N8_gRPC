@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: Build and Push N8 Docker Images
 
 on:
   push:
@@ -6,14 +6,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-push:
+  build-and-upload:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -24,10 +21,14 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: junpeng999/n8-control-center:latest
+      - name: Build Backend Image
+        run: |
+          cd backend
+          docker build -t junpeng999/n8-control-center:latest -f Dockerfile .
+          docker push junpeng999/n8-control-center:latest
+
+      - name: Build Frontend Image
+        run: |
+          cd frontend
+          docker build -t junpeng999/n8-web-frontend:latest -f Dockerfile.web .
+          docker push junpeng999/n8-web-frontend:latest

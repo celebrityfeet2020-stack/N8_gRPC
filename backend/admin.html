@@ -340,7 +340,7 @@
             const secret = document.getElementById('login-secret').value;
             
             if (!key || !secret) {
-                showToast('Please enter both Key and Secret', 'error');
+                showToast('请输入密钥和密码', 'error');
                 return;
             }
 
@@ -358,10 +358,10 @@
                         loadDevices();
                         localStorage.setItem('n8_auth', JSON.stringify({key, secret}));
                     } else {
-                        showToast('Login failed: Invalid credentials', 'error');
+                        showToast('登录失败：凭证无效', 'error');
                     }
                 })
-                .catch(err => showToast('Connection error', 'error'));
+                .catch(err => showToast('连接错误', 'error');;
         }
 
         function handleLogout() {
@@ -406,10 +406,10 @@
                         <td>${d.device_id}</td>
                         <td>${d.device_name || '-'}</td>
                         <td>${d.ip_address}</td>
-                        <td><span class="status-badge ${isOnline ? 'status-online' : 'status-offline'}">${isOnline ? 'Online' : 'Offline'}</span></td>
+                        <td><span class="status-badge ${isOnline ? 'status-online' : 'status-offline'}">${isOnline ? '在线' : '离线'}</span></td>
                         <td>${new Date(d.last_heartbeat).toLocaleString()}</td>
                         <td>
-                            <button onclick="openRenameModal('${d.device_id}', '${d.device_name || ''}')">Rename</button>
+                            <button onclick="openRenameModal('${d.device_id}', '${d.device_name || ''}')">重命名</button>
                         </td>
                     `;
                     tbody.appendChild(tr);
@@ -438,14 +438,14 @@
                 });
                 
                 if (res.ok) {
-                    showToast('Device renamed successfully', 'success');
+                    showToast('设备重命名成功', 'success');
                     closeModal('rename-device-modal');
                     loadDevices();
                 } else {
-                    showToast('Failed to rename device', 'error');
+                    showToast('重命名设备失败', 'error');
                 }
             } catch (err) {
-                showToast('Error renaming device', 'error');
+                showToast('重命名设备出错', 'error');
             }
         }
 
@@ -454,7 +454,7 @@
             try {
                 const res = await fetch(`${API_BASE}/auth/keys`, { headers: authHeaders });
                 if (res.status === 403) {
-                    document.querySelector('#keys-table tbody').innerHTML = '<tr><td colspan="6" style="text-align:center">Permission Denied: Only Web Admin can manage keys</td></tr>';
+                    document.querySelector('#keys-table tbody').innerHTML = '<tr><td colspan="6" style="text-align:center">权限拒绝：仅 Web 管理员可管理密钥</td></tr>';
                     return;
                 }
                 
@@ -471,13 +471,13 @@
                         <td>${k.permissions.join(', ') || '*'}</td>
                         <td>${new Date(k.created_at).toLocaleDateString()}</td>
                         <td>
-                            <button class="danger" onclick="deleteApiKey(${k.id})">Delete</button>
+                            <button class="danger" onclick="deleteApiKey(${k.id})">删除</button>
                         </td>
                     `;
                     tbody.appendChild(tr);
                 });
             } catch (err) {
-                showToast('Failed to load API keys', 'error');
+                showToast('加载 API 密钥失败', 'error');
             }
         }
 
@@ -506,20 +506,20 @@
                 
                 if (res.ok) {
                     const data = await res.json();
-                    alert(`API Key Created!\n\nKey: ${data.api_key}\nSecret: ${secret}\n\nSAVE THIS SECRET NOW! It cannot be retrieved later.`);
+                    alert(`API 密钥已创建！\n\n密钥: ${data.api_key}\n密码: ${secret}\n\n请立即保存此密码！稍后无法找回。`);
                     closeModal('create-key-modal');
                     loadApiKeys();
                 } else {
                     const err = await res.json();
-                    showToast(err.detail || 'Failed to create key', 'error');
+                    showToast(err.detail || '创建密钥失败', 'error');
                 }
             } catch (err) {
-                showToast('Error creating key', 'error');
+                showToast('创建密钥出错', 'error');
             }
         }
 
         async function deleteApiKey(id) {
-            if (!confirm('Are you sure you want to delete this API Key?')) return;
+            if (!confirm('确定要删除此 API 密钥吗？')) return;
             
             try {
                 const res = await fetch(`${API_BASE}/auth/keys/${id}`, {
@@ -528,13 +528,13 @@
                 });
                 
                 if (res.ok) {
-                    showToast('API Key deleted', 'success');
+                    showToast('API 密钥已删除', 'success');
                     loadApiKeys();
                 } else {
-                    showToast('Failed to delete key', 'error');
+                    showToast('删除密钥失败', 'error');
                 }
             } catch (err) {
-                showToast('Error deleting key', 'error');
+                showToast('删除密钥出错', 'error');
             }
         }
 

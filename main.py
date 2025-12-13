@@ -1,7 +1,7 @@
 """
 N8枢纽控制中心 - 主应用入口
 FastAPI应用，集成所有模块的路由
-包含M1-M8模块
+包含M1-M6模块
 """
 
 import os
@@ -26,12 +26,6 @@ from process_management import router as process_router, init_process_manager
 
 # 导入M6路由
 from system_monitoring import router as monitoring_router, init_system_monitoring_manager
-
-# 导入M7路由
-from logging_system import router as logging_router, init_logging_manager
-
-# 导入M8路由
-from workflow_orchestration import router as workflow_router, init_workflow_manager
 
 # 导入认证中间件
 from auth_middleware import init_auth_middleware
@@ -87,14 +81,6 @@ async def lifespan(app: FastAPI):
     init_system_monitoring_manager(DATABASE_URL)
     print("✅ 系统监控管理器已初始化")
     
-    # 初始化M7管理器
-    init_logging_manager(DATABASE_URL)
-    print("✅ 日志系统管理器已初始化")
-    
-    # 初始化M8管理器
-    init_workflow_manager(DATABASE_URL)
-    print("✅ 工作流编排管理器已初始化")
-    
     print()
     print("=" * 60)
     print("N8 Hub Control Center - Ready")
@@ -113,8 +99,8 @@ async def lifespan(app: FastAPI):
 # 创建FastAPI应用
 app = FastAPI(
     title="N8 Hub Control Center API",
-    description="AI友好的设备远程控制系统 - M1核心基础 + M4文件管理 + M5进程管理 + M6系统监控 + M7日志系统 + M8工作流编排",
-    version="4.0.0",
+    description="AI友好的设备远程控制系统 - M1核心基础 + M4文件管理 + M5进程管理 + M6系统监控",
+    version="3.0.0",
     lifespan=lifespan,
     docs_url="/docs",
     redoc_url="/redoc"
@@ -149,12 +135,6 @@ app.include_router(process_router)         # 进程管理
 # M6路由
 app.include_router(monitoring_router)      # 系统监控
 
-# M7路由
-app.include_router(logging_router)         # 日志系统
-
-# M8路由
-app.include_router(workflow_router)        # 工作流编排
-
 
 # 根路径
 @app.get("/")
@@ -162,8 +142,8 @@ async def root():
     """根路径 - 系统信息"""
     return {
         "name": "N8 Hub Control Center API",
-        "version": "4.0.0",
-        "stage": "M1 + M4 + M5 + M6 + M7 + M8",
+        "version": "3.0.0",
+        "stage": "M1 + M4 + M5 + M6",
         "status": "running",
         "timestamp": datetime.now().isoformat(),
         "documentation": {
@@ -211,21 +191,6 @@ async def root():
                 "process_guards": "GET /api/v1/monitoring/process-guards/{device_id}",
                 "performance_history": "GET /api/v1/monitoring/performance-history/{device_id}",
                 "network_connections": "GET /api/v1/monitoring/network-connections/{device_id}"
-            },
-            "logs": {
-                "command": "POST /api/v1/logs/command",
-                "agent": "POST /api/v1/logs/agent",
-                "system_event": "POST /api/v1/logs/system-event",
-                "query": "POST /api/v1/logs/query",
-                "analysis": "GET /api/v1/logs/analysis"
-            },
-            "workflows": {
-                "create": "POST /api/v1/workflows",
-                "list": "GET /api/v1/workflows",
-                "execute": "POST /api/v1/workflows/{workflow_id}/execute",
-                "backup": "POST /api/v1/workflows/backup",
-                "batch_command": "POST /api/v1/workflows/batch-command",
-                "health_check": "POST /api/v1/workflows/health-check"
             }
         },
         "modules": {
@@ -250,16 +215,7 @@ async def root():
             "M6-04": "Process Guard",
             "M6-05": "Windows Event Log",
             "M6-06": "Performance History",
-            "M6-07": "Network Connection Query",
-            "M7-01": "Command Execution Log",
-            "M7-02": "Agent Log Upload",
-            "M7-03": "System Event Log",
-            "M7-04": "Log Query API",
-            "M7-05": "Log Analysis Engine",
-            "M8-01": "Temporal Integration",
-            "M8-02": "Device Backup Workflow",
-            "M8-03": "Batch Command Workflow",
-            "M8-04": "Health Check Workflow"
+            "M6-07": "Network Connection Query"
         }
     }
 

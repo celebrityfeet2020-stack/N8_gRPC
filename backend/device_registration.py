@@ -46,7 +46,7 @@ class DeviceResponse(BaseModel):
     os_version: str
     agent_version: str
     status: str
-    last_seen: datetime
+    last_seen_at: datetime
     registered_at: datetime
     description: Optional[str] = None
     tags: Optional[List[str]] = None
@@ -137,7 +137,7 @@ class DeviceRegistrationManager:
                         """
                         UPDATE devices
                         SET hostname = %s, ip_address = %s, os_type = %s, os_version = %s,
-                            agent_version = %s, metadata = %s, last_seen = %s, status = 'online'
+                            agent_version = %s, metadata = %s, last_seen_at = %s, status = 'online'
                         WHERE device_id = %s
                         RETURNING *
                         """,
@@ -221,7 +221,7 @@ class DeviceRegistrationManager:
                     query += " AND os_type = %s"
                     params.append(os_type)
                 
-                query += " ORDER BY last_seen DESC LIMIT %s OFFSET %s"
+                query += " ORDER BY last_seen_at DESC LIMIT %s OFFSET %s"
                 params.extend([limit, offset])
                 
                 cur.execute(query, params)

@@ -6,11 +6,15 @@
     <title>N8 枢纽控制中心</title>
     <style>
         :root {
-            --primary-color: #2563eb;
-            --bg-color: #f3f4f6;
-            --card-bg: #ffffff;
-            --text-color: #1f2937;
-            --border-color: #e5e7eb;
+            /* 深色模式配色 */
+            --primary-color: #3b82f6;
+            --bg-color: #111827;
+            --card-bg: #1f2937;
+            --text-color: #f3f4f6;
+            --text-muted: #9ca3af;
+            --border-color: #374151;
+            --input-bg: #374151;
+            --hover-bg: #4b5563;
         }
         
         body {
@@ -37,39 +41,55 @@
         
         .login-box {
             background: var(--card-bg);
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
             width: 100%;
             max-width: 400px;
+            border: 1px solid var(--border-color);
+        }
+        
+        h1, h2, h3 {
+            color: var(--text-color);
         }
         
         .form-group {
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
         
         label {
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 500;
+            color: var(--text-muted);
         }
         
         input, select {
             width: 100%;
-            padding: 0.5rem;
+            padding: 0.75rem;
+            background-color: var(--input-bg);
             border: 1px solid var(--border-color);
-            border-radius: 4px;
+            border-radius: 6px;
+            color: var(--text-color);
             box-sizing: border-box;
+            font-size: 1rem;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            ring: 2px solid var(--primary-color);
         }
         
         button {
             background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
             cursor: pointer;
-            font-weight: 500;
+            font-weight: 600;
+            transition: background-color 0.2s;
         }
         
         button:hover {
@@ -77,11 +97,16 @@
         }
         
         button.secondary {
-            background-color: #6b7280;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+        }
+        
+        button.secondary:hover {
+            background-color: var(--hover-bg);
         }
         
         button.danger {
-            background-color: #dc2626;
+            background-color: #ef4444;
         }
         
         /* Dashboard */
@@ -92,8 +117,9 @@
         header {
             background: var(--card-bg);
             padding: 1rem 0;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
             margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
         }
         
         .header-content {
@@ -105,13 +131,21 @@
         .nav-tabs {
             display: flex;
             gap: 1rem;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1px;
         }
         
         .nav-tab {
-            padding: 0.5rem 1rem;
+            padding: 0.75rem 1.5rem;
             cursor: pointer;
             border-bottom: 2px solid transparent;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+        
+        .nav-tab:hover {
+            color: var(--text-color);
         }
         
         .nav-tab.active {
@@ -122,10 +156,11 @@
         
         .card {
             background: var(--card-bg);
-            border-radius: 8px;
+            border-radius: 12px;
             padding: 1.5rem;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
             margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
         }
         
         table {
@@ -135,29 +170,35 @@
         
         th, td {
             text-align: left;
-            padding: 0.75rem;
+            padding: 1rem;
             border-bottom: 1px solid var(--border-color);
         }
         
         th {
-            background-color: #f9fafb;
+            background-color: rgba(255, 255, 255, 0.05);
             font-weight: 600;
+            color: var(--text-muted);
+        }
+        
+        tr:hover td {
+            background-color: rgba(255, 255, 255, 0.02);
         }
         
         .status-badge {
-            padding: 0.25rem 0.5rem;
+            padding: 0.25rem 0.75rem;
             border-radius: 9999px;
             font-size: 0.875rem;
+            font-weight: 500;
         }
         
         .status-online {
-            background-color: #d1fae5;
-            color: #065f46;
+            background-color: rgba(16, 185, 129, 0.2);
+            color: #34d399;
         }
         
         .status-offline {
-            background-color: #fee2e2;
-            color: #991b1b;
+            background-color: rgba(239, 68, 68, 0.2);
+            color: #f87171;
         }
         
         .modal {
@@ -167,39 +208,51 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.7);
             justify-content: center;
             align-items: center;
+            backdrop-filter: blur(4px);
         }
         
         .modal-content {
             background: var(--card-bg);
             padding: 2rem;
-            border-radius: 8px;
+            border-radius: 12px;
             width: 100%;
             max-width: 500px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
         }
         
         .modal-actions {
             display: flex;
             justify-content: flex-end;
             gap: 1rem;
-            margin-top: 1.5rem;
+            margin-top: 2rem;
         }
         
         .toast {
             position: fixed;
             bottom: 20px;
             right: 20px;
-            padding: 1rem;
-            border-radius: 4px;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
             color: white;
             display: none;
             z-index: 1000;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
         }
         
-        .toast.success { background-color: #10b981; }
-        .toast.error { background-color: #ef4444; }
+        .toast.success { background-color: #059669; }
+        .toast.error { background-color: #dc2626; }
+        
+        .key-display {
+            font-family: monospace;
+            background: rgba(0,0,0,0.3);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            color: #fbbf24;
+        }
     </style>
 </head>
 <body>
@@ -207,16 +260,15 @@
     <!-- Login Screen -->
     <div id="login-screen">
         <div class="login-box">
-            <h2 style="text-align: center; margin-bottom: 1.5rem;">N8 枢纽登录</h2>
+            <h2 style="text-align: center; margin-bottom: 2rem;">N8 枢纽登录</h2>
             <div class="form-group">
                 <label>API Key</label>
-                <input type="text" id="login-key" placeholder="请输入 API Key">
+                <input type="text" id="login-key" placeholder="sk-..." autocomplete="off">
             </div>
-            <div class="form-group">
-                <label>API Secret</label>
-                <input type="password" id="login-secret" placeholder="请输入 API Secret">
-            </div>
-            <button onclick="handleLogin()" style="width: 100%">登录</button>
+            <button onclick="handleLogin()" style="width: 100%">进入控制台</button>
+            <p style="text-align: center; margin-top: 1rem; color: var(--text-muted); font-size: 0.875rem;">
+                仅需 API Key 即可验证
+            </p>
         </div>
     </div>
 
@@ -224,8 +276,14 @@
     <div id="dashboard">
         <header>
             <div class="container header-content">
-                <h1>N8 枢纽控制中心</h1>
-                <button onclick="handleLogout()" class="secondary">退出登录</button>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <h1 style="margin: 0; font-size: 1.5rem;">N8 枢纽控制中心</h1>
+                    <span style="background: var(--primary-color); padding: 2px 8px; border-radius: 4px; font-size: 0.75rem;">PRO</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <span id="current-user" style="color: var(--text-muted);"></span>
+                    <button onclick="handleLogout()" class="secondary">退出</button>
+                </div>
             </div>
         </header>
         
@@ -238,9 +296,9 @@
             <!-- Devices Tab -->
             <div id="tab-devices">
                 <div class="card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                         <h2>已注册设备</h2>
-                        <button onclick="loadDevices()">刷新列表</button>
+                        <button onclick="loadDevices()" class="secondary">刷新列表</button>
                     </div>
                     <table id="devices-table">
                         <thead>
@@ -261,7 +319,7 @@
             <!-- API Keys Tab -->
             <div id="tab-apikeys" style="display: none;">
                 <div class="card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                         <h2>API Key 管理</h2>
                         <button onclick="showCreateKeyModal()">创建新 Key</button>
                     </div>
@@ -270,8 +328,8 @@
                             <tr>
                                 <th>ID</th>
                                 <th>名称</th>
-                                <th>类型</th>
-                                <th>权限</th>
+                                <th>Key (部分)</th>
+                                <!-- 移除类型列 -->
                                 <th>创建时间</th>
                                 <th>操作</th>
                             </tr>
@@ -286,23 +344,12 @@
     <!-- Create Key Modal -->
     <div id="create-key-modal" class="modal">
         <div class="modal-content">
-            <h3>创建新 API Key</h3>
+            <h3 style="margin-top: 0;">创建新 API Key</h3>
             <div class="form-group">
-                <label>名称</label>
-                <input type="text" id="new-key-name">
+                <label>名称 (必须唯一)</label>
+                <input type="text" id="new-key-name" placeholder="例如: 我的MacBook">
             </div>
-            <div class="form-group">
-                <label>类型</label>
-                <select id="new-key-type">
-                    <option value="web">Web (管理员)</option>
-                    <option value="internal">Internal (设备)</option>
-                    <option value="external">External (集成)</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Secret (可选)</label>
-                <input type="text" id="new-key-secret" placeholder="留空自动生成">
-            </div>
+            <!-- 移除类型选择 -->
             <div class="modal-actions">
                 <button class="secondary" onclick="closeModal('create-key-modal')">取消</button>
                 <button onclick="createApiKey()">创建</button>
@@ -310,10 +357,24 @@
         </div>
     </div>
 
+    <!-- New Key Success Modal -->
+    <div id="new-key-success-modal" class="modal">
+        <div class="modal-content">
+            <h3 style="margin-top: 0; color: #34d399;">创建成功</h3>
+            <p>请立即复制您的 API Key，它将只显示一次：</p>
+            <div class="form-group">
+                <input type="text" id="created-key-value" readonly style="font-family: monospace; background: #000; color: #fbbf24; border: 1px solid #fbbf24;">
+            </div>
+            <div class="modal-actions">
+                <button onclick="closeModal('new-key-success-modal')">我已复制</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Rename Device Modal -->
     <div id="rename-device-modal" class="modal">
         <div class="modal-content">
-            <h3>重命名设备</h3>
+            <h3 style="margin-top: 0;">重命名设备</h3>
             <input type="hidden" id="rename-device-id">
             <div class="form-group">
                 <label>新名称</label>
@@ -331,21 +392,19 @@
     <script>
         // State
         let apiKey = localStorage.getItem('n8_api_key');
-        let apiSecret = localStorage.getItem('n8_api_secret');
         const API_BASE = '/api/v1';
 
         // Init
-        if (apiKey && apiSecret) {
+        if (apiKey) {
             showDashboard();
         }
 
         // Auth Functions
         async function handleLogin() {
-            const key = document.getElementById('login-key').value;
-            const secret = document.getElementById('login-secret').value;
+            const key = document.getElementById('login-key').value.trim();
             
-            if (!key || !secret) {
-                showToast('请输入 API Key 和 Secret', 'error');
+            if (!key) {
+                showToast('请输入 API Key', 'error');
                 return;
             }
 
@@ -353,20 +412,17 @@
                 // Verify credentials by fetching capabilities
                 const response = await fetch(`${API_BASE}/discovery/capabilities`, {
                     headers: {
-                        'X-API-Key': key,
-                        'X-API-Secret': secret
+                        'X-API-Key': key
                     }
                 });
 
                 if (response.ok) {
                     apiKey = key;
-                    apiSecret = secret;
                     localStorage.setItem('n8_api_key', key);
-                    localStorage.setItem('n8_api_secret', secret);
                     showDashboard();
                     showToast('登录成功', 'success');
                 } else {
-                    showToast('认证失败', 'error');
+                    showToast('认证失败: Key 无效', 'error');
                 }
             } catch (error) {
                 showToast('连接错误: ' + error.message, 'error');
@@ -375,16 +431,16 @@
 
         function handleLogout() {
             apiKey = null;
-            apiSecret = null;
             localStorage.removeItem('n8_api_key');
-            localStorage.removeItem('n8_api_secret');
             document.getElementById('dashboard').style.display = 'none';
             document.getElementById('login-screen').style.display = 'flex';
+            document.getElementById('login-key').value = '';
         }
 
         function showDashboard() {
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('dashboard').style.display = 'block';
+            document.getElementById('current-user').textContent = 'Admin';
             loadDevices();
         }
 
@@ -406,17 +462,22 @@
         async function loadDevices() {
             try {
                 const response = await fetch(`${API_BASE}/devices`, {
-                    headers: { 'X-API-Key': apiKey, 'X-API-Secret': apiSecret }
+                    headers: { 'X-API-Key': apiKey }
                 });
                 const data = await response.json();
                 
                 const tbody = document.querySelector('#devices-table tbody');
                 tbody.innerHTML = '';
                 
+                if (data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-muted);">暂无设备</td></tr>';
+                    return;
+                }
+                
                 data.forEach(device => {
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
-                        <td>${device.device_id}</td>
+                        <td><span class="key-display">${device.device_id}</span></td>
                         <td>${device.hostname || '-'}</td>
                         <td>${device.ip_address || '-'}</td>
                         <td><span class="status-badge ${device.status === 'online' ? 'status-online' : 'status-offline'}">${device.status === 'online' ? '在线' : '离线'}</span></td>
@@ -437,7 +498,7 @@
         async function loadApiKeys() {
             try {
                 const response = await fetch(`${API_BASE}/api-keys`, {
-                    headers: { 'X-API-Key': apiKey, 'X-API-Secret': apiSecret }
+                    headers: { 'X-API-Key': apiKey }
                 });
                 const data = await response.json();
                 
@@ -446,11 +507,13 @@
                 
                 data.forEach(key => {
                     const tr = document.createElement('tr');
+                    const shortKey = key.api_key.substring(0, 8) + '...';
+                    
                     tr.innerHTML = `
                         <td>${key.id}</td>
                         <td>${key.api_name}</td>
-                        <td>${key.api_type}</td>
-                        <td>${Array.isArray(key.permissions) ? key.permissions.join(', ') : '*'}</td>
+                        <td><span class="key-display">${shortKey}</span></td>
+                        <!-- 移除类型列 -->
                         <td>${new Date(key.created_at).toLocaleDateString()}</td>
                         <td>
                             <button class="danger" onclick="deleteApiKey(${key.id})">删除</button>
@@ -465,32 +528,39 @@
 
         async function createApiKey() {
             const name = document.getElementById('new-key-name').value;
-            const type = document.getElementById('new-key-type').value;
-            const secret = document.getElementById('new-key-secret').value || Math.random().toString(36).slice(-8);
+            // 默认类型
+            const type = "general";
+            
+            if (!name) {
+                showToast('请输入名称', 'error');
+                return;
+            }
             
             try {
                 const response = await fetch(`${API_BASE}/api-keys`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-API-Key': apiKey,
-                        'X-API-Secret': apiSecret
+                        'X-API-Key': apiKey
                     },
                     body: JSON.stringify({
                         api_name: name,
-                        api_type: type,
-                        secret: secret,
-                        permissions: ["*"]
+                        api_type: type
                     })
                 });
                 
                 if (response.ok) {
+                    const result = await response.json();
                     closeModal('create-key-modal');
+                    
+                    document.getElementById('created-key-value').value = result.api_key;
+                    document.getElementById('new-key-success-modal').style.display = 'flex';
+                    
                     loadApiKeys();
-                    showToast('API Key 创建成功', 'success');
-                    alert(`请保存您的 Secret: ${secret}`);
                 } else {
-                    showToast('创建失败', 'error');
+                    const err = await response.json();
+                    // 显示具体的错误信息（如名称已存在）
+                    showToast('创建失败: ' + (err.detail || '未知错误'), 'error');
                 }
             } catch (error) {
                 showToast('Error: ' + error.message, 'error');
@@ -498,17 +568,19 @@
         }
 
         async function deleteApiKey(id) {
-            if (!confirm('确定要删除这个 API Key 吗？')) return;
+            if (!confirm('确定要删除这个 API Key 吗？此操作不可恢复。')) return;
             
             try {
                 const response = await fetch(`${API_BASE}/api-keys/${id}`, {
                     method: 'DELETE',
-                    headers: { 'X-API-Key': apiKey, 'X-API-Secret': apiSecret }
+                    headers: { 'X-API-Key': apiKey }
                 });
                 
                 if (response.ok) {
                     loadApiKeys();
                     showToast('删除成功', 'success');
+                } else {
+                    showToast('删除失败', 'error');
                 }
             } catch (error) {
                 showToast('Error: ' + error.message, 'error');
@@ -517,6 +589,7 @@
 
         // UI Helpers
         function showCreateKeyModal() {
+            document.getElementById('new-key-name').value = '';
             document.getElementById('create-key-modal').style.display = 'flex';
         }
 

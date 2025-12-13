@@ -181,6 +181,10 @@ class AuthMiddleware:
             return True
 
         # 检查是否有所有需要的权限
+        # 如果拥有超级权限 '*'，直接通过
+        if '*' in user_permissions:
+            return True
+            
         return all(perm in user_permissions for perm in required_permissions)
     
     def require_permissions(self, required_permissions: List[str]):

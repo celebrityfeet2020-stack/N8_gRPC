@@ -1,0 +1,100 @@
+version: '3.8'
+
+# N8控制中心 - Docker Compose配置文件（修复版 v2.0.2）
+# 修复：统一使用非常用端口，避免端口冲突
+# 端口映射：14031→18031(Web), 14032→18032(REST API), 14033→18033(gRPC), 14034→5432(PostgreSQL)
+
+services:
+  # PostgreSQL数据库
+  db:
+    image: postgres:15-alpine
+    container_name: n8-postgres
+    environment:
+      POSTGRES_USER: n8_user
+      POSTGRES_PASSWORD: n8_password_2024
+      POSTGRES_DB: n8_control
+    ports:
+      - "14034:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U n8_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - n8_network
+
+  # 数据库初始化
+  db-init:
+    image: junpeng999/n8-db-init:latest-fixed
+    container_name: n8-db-init
+    environment:
+      DATABASE_URL: postgresql://n8_user:n8_password_2024@db:5432/n8_control
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: "no"
+    networks:
+      - n8_network
+
+  # gRPC服务器（设备通信）
+  grpc-server:
+    image: junpeng999/n8-grpc-server:latest-fixed
+    container_name: n8-grpc-server
+    environment:
+      DATABASE_URL: postgresql://n8_user:n8_password_2024@db:5432/n8_control
+      AGENT_PSK: n8-super-secret-key-2024
+      GRPC_PORT: 18033
+      HEARTBEAT_INTERVAL: 30
+      DEVICE_TIMEOUT: 120
+    ports:
+      - "14033:18033"
+    depends_on:
+      db:
+        condition: service_healthy
+      db-init:
+        condition: service_completed_successfully
+    restart: unless-stopped
+    networks:
+      - n8_network
+
+  # REST API服务器（Web后端）
+  rest-api:
+    image: junpeng999/n8-rest-api:latest-fixed
+    container_name: n8-rest-api
+    environment:
+      DATABASE_URL: postgresql://n8_user:n8_password_2024@db:5432/n8_control
+    ports:
+      - "14032:18032"
+    depends_on:
+      db:
+        condition: service_healthy
+      db-init:
+        condition: service_completed_successfully
+    restart: unless-stopped
+    networks:
+      - n8_network
+
+  # Web前端
+  frontend:
+    image: junpeng999/n8-web:latest-fixed
+    container_name: n8-web-ui
+    ports:
+      - "14031:18031"
+    depends_on:
+      - rest-api
+    restart: unless-stopped
+    networks:
+      - n8_network
+
+# 数据卷
+volumes:
+  postgres_data:
+    driver: local
+
+# 网络
+networks:
+  n8_network:
+    driver: bridge

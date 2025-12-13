@@ -1,0 +1,114 @@
+"""
+N8 Control Center - 数据库初始化脚本
+创建默认管理员用户和API Key
+"""
+
+import os
+import sys
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+from models_merged import Base, User, APIKey, UserRole
+
+
+def init_database():
+    """初始化数据库"""
+    database_url = os.getenv("DATABASE_URL", "postgresql://n8_user:n8_password_2024@localhost:5432/n8_control")
+    
+    print(f"Connecting to database: {database_url}")
+    
+    # 创建引擎
+    engine = create_engine(database_url)
+    
+    # 创建所有表
+    print("Creating tables...")
+    Base.metadata.create_all(engine)
+    print("✅ Tables created successfully")
+    
+    # 创建会话
+    SessionLocal = sessionmaker(bind=engine)
+    session = SessionLocal()
+    
+    try:
+        # 检查是否已有管理员用户
+        admin = session.query(User).filter_by(username="admin").first()
+        
+        if admin:
+            print("⚠️  Admin user already exists")
+        else:
+            # 创建默认管理员用户
+            print("Creating default admin user...")
+            admin = User(
+                username="admin",
+                display_name="系统管理员",
+                role=UserRole.ADMIN,
+                description="N8控制中心默认管理员账户"
+            )
+            session.add(admin)
+            session.commit()
+            session.refresh(admin)
+            print(f"✅ Admin user created: {admin.username} (ID: {admin.id})")
+            
+            # 为管理员创建默认API Key
+            print("Creating default API key for admin...")
+            api_key = APIKey(
+                user_id=admin.id,
+                key=APIKey.generate_key(),
+                name="默认管理员密钥"
+            )
+            session.add(api_key)
+            session.commit()
+            session.refresh(api_key)
+            
+            print("\n" + "="*60)
+            print("🎉 初始化完成！")
+            print("="*60)
+            print(f"\n管理员账户信息：")
+            print(f"  用户名: {admin.username}")
+            print(f"  角色: {admin.role.value}")
+            print(f"\nAPI Key（请妥善保管）：")
+            print(f"  {api_key.key}")
+            print(f"\n使用方式：")
+            print(f"  curl -H 'Authorization: Bearer {api_key.key}' http://localhost:8080/api/devices")
+            print("\n" + "="*60)
+        
+        # 创建示例操作员用户（可选）
+        operator = session.query(User).filter_by(username="operator").first()
+        if not operator:
+            print("\nCreating example operator user...")
+            operator = User(
+                username="operator",
+                display_name="示例操作员",
+                role=UserRole.OPERATOR,
+                description="示例操作员账户，可以执行设备命令"
+            )
+            session.add(operator)
+            session.commit()
+            session.refresh(operator)
+            
+            # 为操作员创建API Key
+            operator_key = APIKey(
+                user_id=operator.id,
+                key=APIKey.generate_key(),
+                name="操作员密钥"
+            )
+            session.add(operator_key)
+            session.commit()
+            session.refresh(operator_key)
+            
+            print(f"✅ Operator user created: {operator.username}")
+            print(f"   API Key: {operator_key.key}")
+        
+        session.commit()
+        print("\n✅ Database initialization completed successfully!")
+        
+    except Exception as e:
+        print(f"\n❌ Error during initialization: {e}")
+        session.rollback()
+        sys.exit(1)
+    finally:
+        session.close()
+
+
+if __name__ == "__main__":
+    init_database()

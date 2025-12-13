@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 测试和示例文件
+test_*.py
+*_example.py
+verify_*.py
+
+# Git
+.git/
+.gitignore
+
+# 文档
+*.md
+docs/
+
+# 其他
+.DS_Store
+*.log

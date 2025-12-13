@@ -1,0 +1,1 @@
+FROM nginx:alpine\nCOPY index.html /usr/share/nginx/html/index.html\nCOPY index.html /usr/share/nginx/html/admin.html\nEXPOSE 80

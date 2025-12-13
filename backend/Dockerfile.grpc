@@ -1,0 +1,22 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# 安装依赖
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 复制代码
+COPY device_control_pb2.py .
+COPY device_control_pb2_grpc.py .
+COPY models.py .
+COPY grpc_server.py .
+
+# 创建日志目录
+RUN mkdir -p /app/logs
+
+# 暴露gRPC端口
+EXPOSE 50051
+
+# 启动gRPC服务器
+CMD ["python", "grpc_server.py"]

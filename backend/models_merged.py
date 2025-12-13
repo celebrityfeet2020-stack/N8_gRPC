@@ -68,19 +68,23 @@ class APIKey(Base):
     __tablename__ = "api_keys"
     
     id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(Integer, ForeignKey('users.id'), nullable=False, index=True)
-    key = Column(String(64), nullable=False, unique=True, index=True)  # sk-xxx格式
-    name = Column(String(255), nullable=False)  # 密钥名称
+    # user_id = Column(Integer, ForeignKey('users.id'), nullable=True, index=True) # 暂时设为可空或移除，因为api_key_manager没用它
+    api_key = Column(String(64), nullable=False, unique=True, index=True)
+    api_name = Column(String(255), nullable=False)
+    api_type = Column(String(50), nullable=False, default='web') # web, external, internal
+    hashed_secret = Column(String(255), nullable=False)
+    permissions = Column(JSON, default=list)
     is_active = Column(Boolean, default=True, nullable=False)
-    expires_at = Column(DateTime, nullable=True)  # 过期时间
-    last_used_at = Column(DateTime, nullable=True)  # 最后使用时间
+    expires_at = Column(DateTime, nullable=True)
+    last_used_at = Column(DateTime, nullable=True)
+    created_by = Column(String(255), nullable=True)
     
     # 时间戳
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
     
-    # 关系
-    user = relationship('User', back_populates='api_keys')
+    # 关系 - 暂时注释掉，因为api_key_manager不依赖User表
+    # user = relationship('User', back_populates='api_keys')
     
     @staticmethod
     def generate_key() -> str:
